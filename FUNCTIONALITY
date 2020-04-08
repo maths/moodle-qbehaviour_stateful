@@ -1,0 +1,66 @@
+Design plan for qbehaviour_stateful:
+
+ 1. Raw extension of question_behaviour to skip all potenttially changing logic of
+    other reasonably close behaviours. Also we probably assume other things.
+
+ 2. Questions focus on defining their action by the state as it was when the question
+    was resumed. Questions will always receive the state before they are asked to do
+    anything.
+
+ 3. That action may lead to the state changing and thus the next time we return to
+    the question we may act differently. Depending on the action we might not save that
+    state change, e.g. not when reviewing a quiz.
+
+ 4. Questions consist of sequences of "scenes" and those sequences may contain
+    the same scenes multiple times even after one of the same. We keep track of
+    our position in that sequence and prefix any and all inputs with that to ensure
+    input values not leaking.
+
+ 5. Each scene may consist of multiple separate graded portions. We will store
+    the grading results of those parts for each scene. But leave the evaluation of
+    the final score to the question. The sequence numbering is used to group these.
+    Other than storing resultting grades from those parts we do not track them.
+
+ 6. The state is stored using numbered identifiers we ask the question for map to them.
+
+ 7. Questions can reach a scene where no action is possible. We need to check for that
+    and and not render check buttons...
+
+ 8. This behaviour does not care about penalties, the question itself can handle those
+    if it so wishes. We only store the state and results of grading actions of parts.
+    The question is expected to construct the final grade from those.
+
+ 9. While this behaviour does not care about penalties it does allow a variant to exist
+    that does not use them. Basically, when it asks for the final grade it can tell that
+    it does not want penalties to be applied.
+
+
+Essenttially, we drop the grading logic to the question level as the question may need
+to use the full state history
+
+
+ Interface functions:
+
+  question:
+    - get_scene_sequence_number($state) => $integer
+       essenttially in qtype_stateful we return the length of SCENE_PATH
+    - get_state_variable_identifiers() => array($integer => $string)
+    - set_state($state)
+    - is_valid_input($input) => $boolean
+    - is_in_end_scene() => $boolean
+    - get_min_fraction() => $float
+    - get_max_fraction() => $float
+       this is the par score for this question, there may be paths through the scenes
+       giving more or less but the target solution gives this
+    - process_input($input) => array($partid => $result_to_store)
+       evaluates the input or at the very least valid parts of it, updates the state
+       and generates data about gradable parts. Does not save the state. The behaviour
+       saves if the action requires it. Also provides keys '_summary' and '_attemptstatus'.
+    - evaluate_total_grade(array($seqid => array($list_of_process_input_results)),
+                           $bool_penalties) => array("total"=>$float, ...)
+       given a list of previous process_input responses and split by the matching
+       scene_sequence_numbers evaluates the total score. Exists because modeling
+       existence of loops and thus multiple times gainable points is beyond
+       the behaviour
+    - get_expected_data() => array
+       pretty much the normal behaviour.
