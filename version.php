@@ -15,11 +15,11 @@
 // along with Stateful.  If not, see <http://www.gnu.org/licenses/>.
 
 defined('MOODLE_INTERNAL') || die();
-$plugin->version   = 2020040800;
-$plugin->requires  = 2018051700;
+$plugin->version   = 2024112000;
+$plugin->requires  = 2022041900;
 $plugin->component = 'qbehaviour_stateful';
 $plugin->maturity  = MATURITY_BETA;
-$plugin->release   = '1.0.0 for Moodle 3.5+';
+$plugin->release   = '1.0.1 for Moodle 4.0+';
 $plugin->dependencies = array(
     'qbehaviour_adaptivemultipart'     => 2018080600,
 );

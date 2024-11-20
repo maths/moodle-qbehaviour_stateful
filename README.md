@@ -6,6 +6,10 @@ The point of Stateful is to provide memory within the question logic by using st
 
 Stateful was created by [Matti Harjula](http://math.aalto.fi/en/people/matti.harjula) of the Aalto University. Stateful, contains contributions done by Eleaga Oy Ltd, it has also been supported by funding from the Finnish Ministry of Education and Culture.
 
+### Changelog
+
+**1.0.1** PHP changes for the initial step.
+
 
 ## Current state of development
 

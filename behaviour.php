@@ -368,7 +368,7 @@ class qbehaviour_stateful extends question_behaviour_with_save {
         $steps->next();
         foreach ($steps as $step) {
             $seqn = $step->get_behaviour_var('_seqn_pre');
-            if ($seqn !== '' && $seqn !== null) {
+            if ($seqn !== '' && $seqn !== null && $step->get_behaviour_var('_data') !== null) {
                 $data = json_decode($step->get_behaviour_var('_data'), true);
                 if ($data) {
                     if (isset($history[$seqn])) {
